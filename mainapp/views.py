@@ -111,7 +111,7 @@ def index(request):
         {
             "title": "JavaScript Quiz",
             "description": "Challenge your skills in JavaScript — variables, DOM, events.",
-            "image": "img/Javascript quiz.jpg",
+            "image": "img/Javascript-quiz.jpg",
             "link": "/quiz/JavaScript/",
         },
         {
