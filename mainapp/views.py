@@ -162,7 +162,7 @@ def index(request):
         {
             "title": "Java Quiz",
             "description": "Test your knowledge of Java basics, OOP, and frameworks.",
-            "image": "img/java-quiz.jpg",
+            "image": "img/Java-quiz.jpg",
             "link": "/quiz/Java/",
         },
         {
