@@ -34,9 +34,18 @@ DEBUG = os.environ.get('DEBUG', 'False').lower() in ['true', '1', 'yes']
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    '.onrender.com',  # Allow all onrender.com subdomains
-    'online-quiz-app-u9n8.onrender.com',  # Specific URL
+    'online-quiz-app-u9n8.onrender.com',  # Specific Render URL
+    '.onrender.com',  # Django wildcard format for onrender.com subdomains
 ]
+
+# Override ALLOWED_HOSTS from environment variable if provided
+if 'ALLOWED_HOSTS' in os.environ:
+    ALLOWED_HOSTS = [host.strip() for host in os.environ.get('ALLOWED_HOSTS').split(',')]
+
+# Fallback for production - if still having issues, temporarily allow all hosts
+# Remove this in production once proper domain is configured
+if not DEBUG and not any('onrender.com' in host for host in ALLOWED_HOSTS):
+    ALLOWED_HOSTS.append('*')
 
 # Application definition
 INSTALLED_APPS = [
