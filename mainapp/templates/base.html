@@ -1,0 +1,193 @@
+{% load static %}
+<link rel="icon" href="{% static 'img/logo.jpg' %}" type="image/x-icon">
+</head>
+
+<body data-user-authenticated="{% if user.is_authenticated %}true{% else %}false{% endif %}"
+    data-session-timeout="{{ settings.SESSION_COOKIE_AGE|default:1800 }}"
+    data-warning-time="{{ settings.SESSION_TIMEOUT_WARNING|default:300 }}">
+    <!---------------------- Navbar ----------------------------->
+    <html lang="en">
+
+    <head>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{% block title %}Online Quiz{% endblock %}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <!--  Font Awesome CDN  -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+        <!-- Bootstrap Icons CDN -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        <link rel="icon" href="{% static 'img/logo.jpg' %}" type="image/x-icon">
+    </head>
+
+    <body>
+        <!---------------------- Navbar ------------------------------>
+        <nav class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
+            <div class="container my-2">
+                <a class="navbar-brand fw-bold" href="{% url 'index' %}">Online Quiz</a>
+
+                <!-- Toggler for mobile -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Navbar links -->
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <!-- Home -->
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'index' %}active{% endif %}"
+                                href="{% url 'index' %}">Home</a>
+                        </li>
+                        <!-- Leaderboard -->
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.resolver_match.url_name == 'leaderboard' %}active{% endif %}"
+                                href="{% url 'leaderboard' %}">Leaderboard</a>
+                        </li>
+                        <!-- Quizzes Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                Quizzes
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'quiz' 'HTML' %}">HTML</a></li>
+                                <li><a class="dropdown-item" href="{% url 'quiz' 'CSS' %}">CSS</a></li>
+                                <li><a class="dropdown-item" href="{% url 'quiz' 'JavaScript' %}">JavaScript</a></li>
+                                <li><a class="dropdown-item" href="{% url 'quiz' 'Python' %}">Python</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- FAQ Dropdown -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                FAQ
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{% url 'faq_how_to_play' %}">How to Play</a></li>
+                                <li><a class="dropdown-item" href="{% url 'faq_scoring_rules' %}">Scoring Rules</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item" href="{% url 'faq_contact_support' %}">Contact Support</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <!-- Desktop: search inline -->
+                    <div class="d-none d-lg-flex align-items-center" style="max-width:600px; margin-left: auto;">
+                        <form class="d-flex w-100 me-2" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search quizzes..."
+                                aria-label="Search">
+                            <button class="btn btn-outline-success" type="submit">Search</button>
+                        </form>
+                        {% if user.is_authenticated %}
+                        <span class="ms-3">Welcome, {{ user.username }}</span>
+                        <a href="{% url 'logout' %}" class="btn btn-danger ms-2">Logout</a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-primary ms-2">Login</a>
+                        {% endif %}
+                    </div>
+                    <!-- Mobile: search menu -->
+                    <div class="d-lg-none w-100 mt-3">
+                        <div class="mobile-navbar-section bg-light">
+                            <!-- Search + Login inline -->
+                            <form class="d-flex w-100 mb-2" role="search">
+                                <div class="input-group shadow-sm">
+                                    <input class="form-control" type="search" placeholder="Search quizzes..."
+                                        aria-label="Search">
+                                    <span class="input-group-text bg-white">
+                                        <i class="bi bi-search text-success"></i>
+                                    </span>
+                                </div>
+                                {% if user.is_authenticated %}
+                                <a href="{% url 'logout' %}" class="btn btn-danger ms-2">Logout</a>
+                                {% else %}
+                                <a href="{% url 'login' %}" class="btn btn-primary ms-2">Login</a>
+                                {% endif %}
+                            </form>
+                            <!-- Optional welcome message -->
+                            {% if user.is_authenticated %}
+                            <small class="text-muted">Welcome, {{ user.username }}</small>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+        <!---------------------- Page Content ------------------------------>
+        <main class="container my-4">
+            {% block content %}
+            {% endblock %}
+        </main>
+
+        <!---------------------- Footer ------------------------------>
+        <footer class="bg-dark text-light pt-4 mt-auto">
+            <div class="container text-center text-md-start">
+                <div class="row">
+                    <!-- About Section -->
+                    <div class="col-md-6 mb-3">
+                        <h5 class="fw-bold">FreeOnlineQuizzes</h5>
+                        <p class="small">
+                            Practice, learn, and challenge yourself with quizzes across multiple categories.
+                            Fun, interactive, and always free to play.
+                        </p>
+                    </div>
+
+                    <!-- Social Links -->
+                    <div class="col-md-6 text-center text-md-end">
+                        <h6 class="fw-bold mb-3">Connect with me</h6>
+                        <a href="https://github.com/Avdhesh-maurya" target="_blank" class="me-3 fs-4 social-link"
+                            style="color: #fcfcfc;">
+                            <i class="bi bi-github"></i>
+                        </a>
+                        <a href="https://twitter.com/Avdhesh_kumar08" target="_blank" class="me-3 fs-4 social-link"
+                            style="color: #1DA1F2;">
+                            <i class="bi bi-twitter"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" class="me-3 fs-4 social-link"
+                            style="color: #E4405F;">
+                            <i class="bi bi-instagram"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/avdhesh-kumar07" target="_blank" class="fs-4 social-link"
+                            style="color: #0A66C2;">
+                            <i class="bi bi-linkedin"></i>
+                        </a>
+                    </div>
+
+
+                </div>
+
+                <hr class="my-3 border-light" />
+
+                <!-- Copyright -->
+                <div class="text-center small">
+                    <a href="http://localhost:8000/admin">
+                        <h6 class="fw-bold text-light" id="copyright">© 2025 Avdhesh</h6>
+                    </a>
+                    <p class="small mb-0 pb-2">All rights reserved | Built with Django & Bootstrap using db.sqlite3</p>
+                </div>
+            </div>
+        </footer>
+
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+        <!-- Session Timeout Handler -->
+        {% if user.is_authenticated %}
+        <script src="{% static 'js/session-timeout.js' %}"></script>
+        {% endif %}
+
+    </body>
+
+    </html>

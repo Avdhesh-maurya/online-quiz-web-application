@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ category }} Quiz - Online Quiz{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="card shadow-lg p-4">
+        <h2 class="text-center fw-bold mb-4">{{ category }} Quiz</h2>
+
+        <!-- Show score after submission -->
+        {% if score is not None %}
+        <div class="alert alert-info text-center">
+            You scored <strong>{{ score }}</strong> out of <strong>{{ total }}</strong>.
+        </div>
+        <div class="text-center mb-3">
+            <a href="{% url 'index' %}" class="btn btn-secondary me-4">Back to Home</a>
+            <a href="{% url 'quiz' category %}" class="btn btn-primary">Retry Quiz</a>
+        </div>
+
+        <!-- Celebration Section -->
+        {% if score >= total|add:"-1" %} {# Condition: high score (almost perfect) #}
+        <!-- Audio -->
+        <audio id="celebration-audio" src="{% static '/audio/audio.wav' %}" preload="auto"></audio>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Play audio
+                const audio = document.getElementById("celebration-audio");
+                audio.play();
+
+                // Fire multiple confetti bursts 🎉
+                function fireConfetti() {
+                    confetti({
+                        particleCount: 320,
+                        spread: 100,
+                        origin: { y: 0.6 }
+                    });
+                }
+
+                // Burst 3 times
+                fireConfetti();
+                setTimeout(fireConfetti, 700);
+                setTimeout(fireConfetti, 1400);
+            });
+        </script>
+        {% endif %}
+
+        {% else %}
+        <!-- Quiz form -->
+        <form method="post" class="quiz-form">
+            {% csrf_token %}
+            {% for q in questions %}
+            <div class="mb-4 p-3 p-md-4 rounded shadow-sm bg-light">
+                <h5 class="fw-bold mb-3">Q{{ forloop.counter }}. {{ q.text }}</h5>
+                <div class="ms-2 ms-md-3">
+                    {% for opt in q.options %}
+                    <div class="form-check mb-2">
+                        <input type="radio" class="form-check-input" name="q{{ q.id }}" value="{{ opt }}" id="q{{ q.id }}{{ forloop.counter }}">
+                        <label class="form-check-label" for="q{{ q.id }}{{ forloop.counter }}">{{ opt }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="text-center mt-4">
+                <button type="submit" class="btn btn-success btn-lg px-4 py-2">Submit Quiz</button>
+            </div>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

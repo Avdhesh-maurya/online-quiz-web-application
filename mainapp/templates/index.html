@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home - Online Quiz{% endblock %}
+
+{% block content %}
+{% if messages %}
+<div class="container mt-3">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<style>
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Pacifico&family=Montserrat:wght@400;600&display=swap');
+
+    body {
+        font-family: 'Roboto', sans-serif;
+        /* Default font for body */
+        font-size: 16px;
+        color: #333;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 600;
+        color: #222;
+    }
+
+    .logo,
+    .special-text {
+        font-family: 'Pacifico', cursive;
+        color: #ff5722;
+    }
+
+    p {
+        font-family: 'Roboto', sans-serif;
+        line-height: 1.6;
+    }
+
+    .btn {
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 500;
+    }
+
+    .quiz-card h5 {
+        font-family: 'Roboto', sans-serif;
+        font-weight: 700;
+        color: #1a73e8;
+    }
+
+    a {
+        font-family: 'Montserrat', sans-serif;
+        text-decoration: none;
+    }
+
+    Utility class for italic / fancy font .fancy {
+        font-family: cursive;
+    }
+
+    .card img {
+        transition: transform 0.5s ease;
+    }
+
+    .card:hover img {
+        transform: scale(1.1);
+    }
+
+    .card-img-top {
+        height: 180px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    @media (max-width: 576px) {
+        .card-img-top {
+            height: auto;
+        }
+    }
+</style>
+
+<div class="container py-5">
+    <div class="quiz-card text-center p-4 shadow-sm rounded-4 bg-light">
+
+        <!-- Title -->
+        <h1 class="mb-3 fw-bold text-primary">Test Your Knowledge!</h1>
+
+        <!-- Description -->
+        <p class="lead">
+            Welcome to <strong class="text-danger">FreeOnlineQuizzes</strong> —
+            a simple and interactive way to practice and improve your knowledge.
+            Choose from categories like <em class="text-success">Frontend</em>,
+            <em class="text-info">Backend</em>,
+            <em class="text-warning">Frameworks</em>, and more.
+            Answer timed multiple-choice questions, get instant feedback, and track your score.
+        </p>
+        <p class="fw-bold">
+            Perfect for students, teachers, or anyone who loves learning while having fun!
+        </p>
+
+        <!-- Form -->
+        <form class="mt-4">
+            <div class="d-flex justify-content-center gap-3 flex-wrap">
+
+                <!-- HTML Quiz Button -->
+                <a href="{% url 'quiz' 'HTML' %}" class="btn btn-primary d-flex align-items-center gap-2">
+                    <i class="bi bi-code-slash"></i> Take HTML Quiz
+                </a>
+
+                <!-- Sign Up Button -->
+                <a href="{% url 'signup' %}" class="btn btn-outline-primary d-flex align-items-center gap-2">
+                    <i class="bi bi-person-plus"></i> Sign Up
+                </a>
+
+            </div>
+        </form>
+    </div>
+</div>
+<!-- ================= Frontend Section ================= -->
+<div class="container">
+    <h2 class="text-center fw-bold mb-4">Frontend Languages Quizzes</h2>
+    <div class="row g-4">
+        {% for quiz in frontend_data %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm border-0">
+                <img src="{% static quiz.image %}" class="card-img-top img-fluid" alt="{{ quiz.title }}">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold">{{ quiz.title }}</h5>
+                    <p class="card-text">{{ quiz.description }}</p>
+                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                        <a href="{{ quiz.link }}" class="btn btn-primary btn-sm">Start Quiz</a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm">Resume Quiz</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-danger">No quizzes available at the moment.</p>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ================= Backend Section ================= -->
+<div class="container my-5">
+    <h2 class="text-center fw-bold mb-4">Backend Languages Quizzes</h2>
+    <div class="row g-4">
+        {% for quiz in backend_data %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card h-100 shadow-sm border-0">
+                <img src="{% static quiz.image %}" class="card-img-top img-fluid" alt="{{ quiz.title }}">
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold">{{ quiz.title }}</h5>
+                    <p class="card-text">{{ quiz.description }}</p>
+                    <div class="d-flex justify-content-center gap-2 flex-wrap">
+                        <a href="{{ quiz.link }}" class="btn btn-primary btn-sm">Start Quiz</a>
+                        <a href="#" class="btn btn-outline-secondary btn-sm">Resume Quiz</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center text-danger">No backend quizzes available at the moment.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

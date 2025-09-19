@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5" style="max-width: 500px;">
+  <h2 class="text-center mb-4">Sign Up</h2>
+  <form method="POST">{% csrf_token %}
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" id="username" name="username" placeholder="Enter username" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label">Password</label>
+      <input type="password" id="password" name="password" placeholder="Enter password" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label for="confirm_password" class="form-label">Confirm Password</label>
+      <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm password"
+        class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-primary w-100">Sign Up</button>
+  </form>
+
+  <p class="text-center mt-3">
+    Already have an account? <a href="{% url 'login' %}">Login here</a>
+  </p>
+</div>
+<style>
+  footer {
+    margin-top: auto;
+  }
+
+  .social-link {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    text-decoration: none;
+  }
+
+  .social-link:hover {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+
+  #copyright,
+  a {
+    font-size: 14px;
+    text-decoration: none;
+  }
+</style>
+{% endblock %}
